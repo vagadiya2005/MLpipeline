@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import joblib
+import pickle
 import os
 
 # 1. Load the Dataset
@@ -32,6 +33,7 @@ y_pred = model.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
 print(f"Mean Squared Error: {mse}")
 
-# 6. Save the Model
-joblib.dump(model, "model.pkl")
-print("Model saved as model.pkl")
+ # Save the trained model
+with open('model.pkl', 'wb') as f:
+    pickle.dump(model, f)
+    print("Model trained and saved as model.pkl")
