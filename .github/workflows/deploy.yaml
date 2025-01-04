@@ -29,6 +29,10 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}  # Set up in GitHub Secrets
         password: ${{ secrets.DOCKER_PASSWORD }}  # Set up in GitHub Secrets
 
+    - name: Check Installed Packages
+      run: pip list
+
+
     - name: Train model
       run: |
         python model.py
