@@ -30,7 +30,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}  # Set up in GitHub Secrets
 
     - name: Check Installed Packages
-      run: pip list
+      run: pip install pandas
 
 
     - name: Train model
