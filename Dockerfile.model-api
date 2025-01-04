@@ -1,22 +1,20 @@
-# Dockerfile for Model API
 FROM python:3.10-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Copy requirements and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# run model.py
-RUN model.py
-
-# Copy model and app files
-COPY model.pkl .
+# Copy model training script and API
+COPY model.py .
 COPY model_api.py .
 
-# Expose port
+# Train the model during the image build
+RUN python model.py
+
+# Expose port for the API
 EXPOSE 5001
 
-# Run the model API app
+# Start the Flask API
 CMD ["python", "model_api.py"]
