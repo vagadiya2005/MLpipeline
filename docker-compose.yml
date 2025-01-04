@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  model-api:
+    image: prince066/model-api:latest  # Use Docker Hub image
+    ports:
+      - "5001:5001"
+    container_name: model-api
+
+  flask-app:
+    image: prince066/flask-app:latest  # Use Docker Hub image
+    ports:
+      - "5000:5000"
+    environment:
+      - MODEL_API_URL=http://model-api:5001/predict
+    depends_on:
+      - model-api

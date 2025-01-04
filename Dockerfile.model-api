@@ -1,0 +1,22 @@
+# Dockerfile for Model API
+FROM python:3.10-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# run model.py
+RUN model.py
+
+# Copy model and app files
+COPY model.pkl .
+COPY model_api.py .
+
+# Expose port
+EXPOSE 5001
+
+# Run the model API app
+CMD ["python", "model_api.py"]
