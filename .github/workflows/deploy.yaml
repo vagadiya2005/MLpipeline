@@ -42,8 +42,6 @@ jobs:
         sudo chmod +x /usr/local/bin/docker-compose
         docker-compose --version
 
-
-
     - name: Train model
       run: |
         python model.py
@@ -61,9 +59,21 @@ jobs:
         docker push ${{ secrets.DOCKER_USERNAME }}/model-api:latest
         docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
 
-    - name: Deploy using Docker Compose
-      run: |
-        docker-compose up -d
+
+    - name: Deploy to Remote server
+      run: | 
+        ssh -o StrictHostKeyChecking-no ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} << 'EOF'
+
+          docker-compose down
+          docker-compose up -d
+      
+        EOF
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    # - name: Deploy using Docker Compose
+    #   run: |
+    #     docker-compose up -d
 
     # - name: Test Flask app deployment
     #   run: |
