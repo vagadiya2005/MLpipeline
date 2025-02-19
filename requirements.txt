@@ -1,6 +1,4 @@
-
-Flask
-requests
+flask
 numpy
 pandas
 scikit-learn
