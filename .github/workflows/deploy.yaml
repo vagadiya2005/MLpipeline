@@ -36,6 +36,12 @@ jobs:
         pip install --no-cache-dir --force-reinstall -r requirements.txt
         pip install seaborn
 
+
+    - name: Install Seaborn
+      run: |
+        pip install seaborn
+      
+
     - name: Install Docker Compose
       run: |
         DOCKER_COMPOSE_VERSION=2.20.2
