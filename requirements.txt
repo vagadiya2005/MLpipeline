@@ -4,6 +4,6 @@ pandas
 scikit-learn
 matplotlib
 joblib
-jupyter
 papermill
 seaborn  
+xgboost
