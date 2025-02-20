@@ -29,17 +29,21 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}  # Set up in GitHub Secrets
         password: ${{ secrets.DOCKER_PASSWORD }}  # Set up in GitHub Secrets
 
-
-    - name: Install Dependencies
+    - name: Install Python Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install --no-cache-dir --force-reinstall -r requirements.txt
-        pip install seaborn
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir --force-reinstall -r requirements.txt || { echo "Installation failed"; cat /tmp/pip-log.txt; exit 1; }
+
+    # - name: Install Dependencies
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     pip install --no-cache-dir --force-reinstall -r requirements.txt
+      
 
 
-    - name: Install Seaborn
-      run: |
-        pip install seaborn
+    # - name: Install Seaborn
+    #   run: |
+    #     pip install seaborn
       
 
     - name: Install Docker Compose
