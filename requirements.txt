@@ -1,9 +1,10 @@
-flask
+
 numpy
 pandas
-scikit-learn
 matplotlib
-joblib
-papermill
-seaborn  
+seaborn
+scikit-learn
 xgboost
+joblib
+flask
+papermill
