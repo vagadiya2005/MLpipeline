@@ -50,8 +50,8 @@ jobs:
 
     - name: Build Flask app Docker image
       run: |
-        docker build -f Dockerfile.flask-app -t ${{ secrets.DOCKER_USERNAME }}/flask-app:v0.2 .
+        docker build -f Dockerfile.flask-app -t ${{ secrets.DOCKER_USERNAME }}/flask-app:v0.3 .
 
     - name: Push Docker images to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:v0.2 
+        docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:v0.3
