@@ -15,4 +15,4 @@ COPY app.py .
 EXPOSE 6000
 
 # Run the Flask app
-CMD ["python", "model_api.py"]
+CMD ["python", "House_Price_Prediction.py"]
