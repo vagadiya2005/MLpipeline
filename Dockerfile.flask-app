@@ -9,7 +9,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy Flask app files
-COPY app.py .
+COPY House_Price_Prediction.py .
 
 # Expose port
 EXPOSE 6000
