@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# <a href="https://colab.research.google.com/github/MYoussef885/House_Price_Prediction/blob/main/House_Price_Prediction.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
-
-# In[1]:
-
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,221 +8,95 @@ from xgboost import XGBRegressor
 from sklearn import metrics
 import joblib
 import pickle
+import logging
+import argparse
 import os
 
-
-# In[2]:
-
-
-import sys
-get_ipython().system('{sys.executable} -m pip install sklearn')
-
-
-import sys
-get_ipython().system('{sys.executable} -m pip install xgboost')
-
-
-
-
-
-
-# Importing the Boston House Price Dataset
-
-# In[3]:
-
-
-house_price_dataset = sklearn.datasets.fetch_california_housing()
-
-
-# In[4]:
-
-
-print(house_price_dataset)
-
-
-# In[5]:
-
-
-# Loading the dataset to a pandas dataframe
-house_price_dataframe = pd.DataFrame(house_price_dataset.data, columns = house_price_dataset.feature_names)
-
-
-# In[6]:
-
-
-house_price_dataframe.head()
-
-
-# In[7]:
-
-
-# add the target column to the dataframe
-house_price_dataframe['price'] = house_price_dataset.target
-
-
-# In[8]:
-
-
-house_price_dataframe.head()
-
-
-# In[9]:
-
-
-# checking the number of rows and columns in the dataframe
-house_price_dataframe.shape
-
-
-# In[10]:
-
-
-# check for missing values
-house_price_dataframe.isnull().sum
-
-
-# In[11]:
-
-
-# statistical measures of the dataset
-house_price_dataframe.describe()
-
-
-# Understanding the **correlation** between various features in the dataset
-
-# 1. Positive Correlation
-# 2. Negative Correlation
-
-# In[12]:
-
-
-correlation = house_price_dataframe.corr()
-
-
-# In[13]:
-
-
-# constructing a heatmap to understand the correlation
-
-plt.figure(figsize=(10,10))
-sns.heatmap(correlation, cbar=True, square=True, fmt='.1f', annot=True, annot_kws={'size':8}, cmap='Blues')
-
-
-# Splitting the data and target
-
-# In[14]:
-
-
-X = house_price_dataframe.drop(['price'], axis=1)
-Y = house_price_dataframe['price']
-
-
-# In[15]:
-
-
-print(X,Y)
-
-
-# Splitting the data into training data and test data
-
-# In[16]:
-
-
-X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size=0.2, random_state=2)
-
-
-# In[17]:
-
-
-print(X.shape, X_train.shape, X_test.shape)
-
-
-# Model Training
-
-# XGBoost Regressor
-
-# In[18]:
-
-
-# load the model
-model = XGBRegressor()
-
-
-# In[19]:
-
-
-#training the model with X_train
-model.fit(X_train, Y_train)
-
-
-# Evaluation
-
-# Prediction on training data
-
-# In[20]:
-
-
-# accuracy for prediction on training data
-training_data_prediction = model.predict(X_train)
-
-
-# In[21]:
-
-
-print(training_data_prediction)
-
-
-# In[22]:
-
-
-# R Squared Error
-score_1 = metrics.r2_score(Y_train, training_data_prediction)
-
-# Mean Absolute Error
-score_2 = metrics.mean_absolute_error(Y_train, training_data_prediction)
-
-print('R Sqaured Error:', score_1)
-print('Mean Absolute Error:', score_2)
-
-
-# Visualize the actuale prices and predicted prices
-
-# In[23]:
-
-
-plt.scatter(Y_train, training_data_prediction)
-plt.xlabel("Actual Price")
-plt.ylabel("Predicted Price")
-plt.title("Actual Price vs Predicted Price")
-plt.show()
-
-
-# Prediction on test data
-
-# In[24]:
-
-
-# accuracy for prediction on test data
-test_data_prediction = model.predict(X_test)
-
-
-# In[25]:
-
-
-# R Squared Error
-score_1 = metrics.r2_score(Y_test, test_data_prediction)
-
-# Mean Absolute Error
-score_2 = metrics.mean_absolute_error(Y_test, test_data_prediction)
-
-print('R Sqaured Error:', score_1)
-print('Mean Absolute Error:', score_2)
-
-
-# In[26]:
-
-
-# Save the trained model
-with open('model.pkl', 'wb') as f:
-   pickle.dump(model, f)
-   print("Model trained and saved as model.pkl")
-
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+def load_dataset():
+    """Load the California housing dataset and return it as a DataFrame."""
+    try:
+        house_price_dataset = sklearn.datasets.fetch_california_housing()
+        df = pd.DataFrame(house_price_dataset.data, columns=house_price_dataset.feature_names)
+        df["price"] = house_price_dataset.target
+        logging.info("Dataset successfully loaded.")
+        return df
+    except Exception as e:
+        logging.error(f"Error loading dataset: {e}")
+        raise
+
+def preprocess_data(df):
+    """Perform basic preprocessing and return feature and target variables."""
+    if df.isnull().sum().sum() > 0:
+        logging.warning("Dataset contains missing values.")
+        df = df.dropna()
+    
+    X = df.drop(["price"], axis=1)
+    Y = df["price"]
+    return X, Y
+
+def train_model(X_train, Y_train):
+    """Train an XGBoost model and return the trained model."""
+    try:
+        model = XGBRegressor()
+        model.fit(X_train, Y_train)
+        logging.info("Model training completed.")
+        return model
+    except Exception as e:
+        logging.error(f"Error during model training: {e}")
+        raise
+
+def evaluate_model(model, X, Y, dataset_type="Test"):
+    """Evaluate model performance and log results."""
+    predictions = model.predict(X)
+    r2_score = metrics.r2_score(Y, predictions)
+    mae = metrics.mean_absolute_error(Y, predictions)
+
+    logging.info(f"{dataset_type} Data - R² Score: {r2_score:.4f}, Mean Absolute Error: {mae:.4f}")
+    
+    if dataset_type == "Train":
+        plt.scatter(Y, predictions)
+        plt.xlabel("Actual Price")
+        plt.ylabel("Predicted Price")
+        plt.title("Actual Price vs Predicted Price")
+        plt.show()
+
+def save_model(model, filename="model.pkl"):
+    """Save trained model as a pickle file."""
+    try:
+        with open(filename, "wb") as f:
+            pickle.dump(model, f)
+        logging.info(f"Model saved as {filename}.")
+    except Exception as e:
+        logging.error(f"Error saving model: {e}")
+        raise
+
+def main():
+    parser = argparse.ArgumentParser(description="House Price Prediction Model")
+    parser.add_argument("--train", action="store_true", help="Train and save the model")
+    parser.add_argument("--evaluate", action="store_true", help="Evaluate the trained model")
+    args = parser.parse_args()
+
+    df = load_dataset()
+    X, Y = preprocess_data(df)
+    
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=2)
+    logging.info(f"Data split: Train shape {X_train.shape}, Test shape {X_test.shape}")
+
+    if args.train:
+        model = train_model(X_train, Y_train)
+        save_model(model)
+
+    if args.evaluate:
+        if os.path.exists("model.pkl"):
+            with open("model.pkl", "rb") as f:
+                model = pickle.load(f)
+            logging.info("Loaded saved model for evaluation.")
+            evaluate_model(model, X_test, Y_test, dataset_type="Test")
+        else:
+            logging.error("No saved model found. Train the model first.")
+
+if __name__ == "__main__":
+    main()
