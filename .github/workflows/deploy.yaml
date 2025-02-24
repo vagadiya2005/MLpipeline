@@ -69,29 +69,5 @@ jobs:
 
     - name: Push Docker images to Docker Hub
       run: |
-        docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/flask-app:v0.1 
 
-
-    # - name: Deploy to Remote server
-    #   run: | 
-    #     ssh -o StrictHostKeyChecking-no ${{secrets.REMOTE_USER}}@${{secrets.REMOTE_HOST}} << 'EOF'
-
-    #       docker-compose down
-    #       docker-compose up -d
-      
-    #     EOF
-    #   env:
-    #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    # - name: Deploy using Docker Compose
-    #   run: |
-    #     docker-compose up -d
-
-    # - name: Test Flask app deployment
-    #   run: |
-    #     curl -X POST -H "Content-Type: application/json" -d '{"features": [1800, 3, 15]}' http://localhost:5000/predict
-    #     # You can add more tests to ensure the model is working as expected
-
-    # - name: Clean up Docker containers
-    #   run: |
-    #     docker-compose down
