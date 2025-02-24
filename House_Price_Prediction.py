@@ -88,6 +88,8 @@ def main():
     if args.train:
         model = train_model(X_train, Y_train)
         save_model(model)
+        logging.info("Model training completed.")
+        
 
     if args.evaluate:
         if os.path.exists("model.pkl"):

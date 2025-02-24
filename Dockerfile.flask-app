@@ -10,9 +10,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy Flask app files
 COPY House_Price_Prediction.py .
+COPY model_api.py .
+
+RUN python House_Price_Prediction.py --train
+
 
 # Expose port
 EXPOSE 6000
 
 # Run the Flask app
-CMD ["python", "House_Price_Prediction.py"]
+CMD ["python", "model_api.py"]
