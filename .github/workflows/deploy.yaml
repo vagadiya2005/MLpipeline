@@ -53,13 +53,7 @@ jobs:
         sudo chmod +x /usr/local/bin/docker-compose
         docker-compose --version
 
-    - name: Convert Jupyter Notebook to Python Script
-      run: |
-        jupyter nbconvert --to script House_Price_Prediction.ipynb
 
-    - name: Clean Up Unwanted Jupyter Code
-      run: |
-        sed -i '/get_ipython/d' House_Price_Prediction.py  # Removes 'get_ipython' lines
 
     - name: Train Model
       run: |
