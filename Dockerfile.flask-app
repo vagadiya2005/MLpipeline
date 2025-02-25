@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# stage 2 - build the flask app
+# stage 2 - build the flask app and copy the model
 # Copy Flask app files
 FROM python:3.10-slim
 WORKDIR /app
