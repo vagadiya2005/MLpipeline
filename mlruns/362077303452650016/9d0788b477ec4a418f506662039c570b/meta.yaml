@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/362077303452650016/9d0788b477ec4a418f506662039c570b/artifacts
+end_time: 1740578938215
+entry_point_name: ''
+experiment_id: '362077303452650016'
+lifecycle_stage: active
+run_id: 9d0788b477ec4a418f506662039c570b
+run_name: valuable-wren-862
+run_uuid: 9d0788b477ec4a418f506662039c570b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740578937889
+status: 3
+tags: []
+user_id: admin
