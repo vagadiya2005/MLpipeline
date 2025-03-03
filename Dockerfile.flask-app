@@ -17,7 +17,7 @@ COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy project files
-COPY House_Price_Prediction.py model_api.py .
+COPY House_Price_Prediction.py model_api.py ./
 
 # Train ML model
 RUN python House_Price_Prediction.py --train
