@@ -4,3 +4,5 @@ venv
 model.pkl
 mlruns
 mlartifact
+backend/node_modules
+backend/.env
