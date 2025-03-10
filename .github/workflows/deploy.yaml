@@ -1,4 +1,4 @@
-name: Run Colab Notebook
+name: Run Jupyter Notebook on Colab
 
 on: 
   push:
@@ -11,10 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install Dependencies
-      run: |
-        pip install gitpython colab-cli
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-    - name: Run Notebook on Google Colab
+    - name: Set Up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install Jupyter and Dependencies
       run: |
-        colab-cli execute ./model_file/BTD.ipynb
+        pip install notebook nbconvert
+
+    - name: Execute Notebook
+      run: |
+        jupyter nbconvert --to notebook --execute ./model_file/BTD.ipynb --output output.ipynb
+
+   
