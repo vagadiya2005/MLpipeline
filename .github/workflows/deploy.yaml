@@ -1,41 +1,38 @@
-name: Deploy Model and Flask App
+name: Run Colab Notebook
 
-on:
+on: 
   push:
-    tags:
-      - "v*"  # Triggers only when a version tag like "v1.0.0" is pushed
+    branches:
+      - dev01
+  workflow_dispatch:
 
 jobs:
-  build_and_push_image:
+  run-notebook:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4  # Use the latest version
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3  # Updated version
+    - name: Set Up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
 
-    - name: Docker Login
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-
-    - name: Extract Git Tag
-      id: get_tag
-      run: echo "IMAGE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-    # - name: Build and Push Docker Image
-    #   run: |
-    #     docker build -f Dockerfile.brain-tumor-predictor -t ${{ secrets.DOCKER_USERNAME }}/brain-tumor-predictor:v0.7 .
-    #     docker push ${{ secrets.DOCKER_USERNAME }}/brain-tumor-predictor:v0.7
-
-    - name: Build and Push Docker Image (Versioned + Latest)
+    - name: Install Dependencies
       run: |
-        docker build -f Dockerfile.brain-tumor-predictor -t ${{ secrets.DOCKER_USERNAME }}/brain-tumor-predictor:${{ env.IMAGE_TAG }} .
-        docker tag ${{ secrets.DOCKER_USERNAME }}/brain-tumor-predictor:${{ env.IMAGE_TAG }} ${{ secrets.DOCKER_USERNAME }}/brain-tumor-predictor:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/brain-tumor-predictor:${{ env.IMAGE_TAG }}
-        docker push ${{ secrets.DOCKER_USERNAME }}/brain-tumor-predictor:latest
+        pip install papermill colab-cli
 
+    - name: Run Notebook on Google Colab
+      run: |
+        colab-cli execute ./model_file/BTD.ipynb --output output.ipynb
 
-
-
-
+    - name: Commit and Push Output Notebook
+      run: |
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "GitHub Actions"
+        git add output.ipynb
+        git commit -m "Updated output notebook"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
