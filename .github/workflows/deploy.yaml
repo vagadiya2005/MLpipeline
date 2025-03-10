@@ -3,7 +3,7 @@ name: Run Colab Notebook
 on: 
   push:
     branches:
-      - dev01
+      - main
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: Install Dependencies
       run: |
-        pip install colab-cli
+        pip install gitpython colab-cli
 
     - name: Run Notebook on Google Colab
       run: |
