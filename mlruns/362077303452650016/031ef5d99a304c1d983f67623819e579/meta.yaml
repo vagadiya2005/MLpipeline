@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/362077303452650016/031ef5d99a304c1d983f67623819e579/artifacts
+end_time: 1740579439518
+entry_point_name: ''
+experiment_id: '362077303452650016'
+lifecycle_stage: active
+run_id: 031ef5d99a304c1d983f67623819e579
+run_name: rogue-sponge-99
+run_uuid: 031ef5d99a304c1d983f67623819e579
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740579439194
+status: 3
+tags: []
+user_id: admin

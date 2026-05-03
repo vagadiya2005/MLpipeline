@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/362077303452650016/871fcea52db2488e81f9f9dd99a298ad/artifacts
+end_time: 1740579999519
+entry_point_name: ''
+experiment_id: '362077303452650016'
+lifecycle_stage: active
+run_id: 871fcea52db2488e81f9f9dd99a298ad
+run_name: dazzling-ram-833
+run_uuid: 871fcea52db2488e81f9f9dd99a298ad
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1740579982149
+status: 3
+tags: []
+user_id: admin
